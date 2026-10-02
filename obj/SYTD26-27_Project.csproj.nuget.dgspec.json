@@ -47,6 +47,14 @@
             "Raylib-cs": {
               "target": "Package",
               "version": "[8.1.0, )"
+            },
+            "Silk.NET.Core": {
+              "target": "Package",
+              "version": "[2.23.0, )"
+            },
+            "Silk.NET.OpenCL": {
+              "target": "Package",
+              "version": "[2.23.0, )"
             }
           },
           "imports": [

@@ -1,10 +1,12 @@
 ﻿using Raylib_cs;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Numerics;
 using System.Text.Json;
 using static Raylib_cs.Raylib;
+using Color = Raylib_cs.Color;
 
 // ============================================================
 // Constants
@@ -24,42 +26,32 @@ const float FIELD_RES = 25.0f;
 CameraState camera = new CameraState();
 
 
-List<Particle> LoadWavefunction(string src)
+List<Vector3> LoadWavefunction(string src)
 {
-    List<Particle> particles = new List<Particle>();
+    List<Vector3> vertices = new List<Vector3>();
 
     if (!File.Exists(src))
     {
         Console.WriteLine($"Datei nicht gefunden: {src}");
-        return particles;
+        return vertices;
     }
 
     try
     {
         string json = File.ReadAllText(src);
 
-        using JsonDocument document =
-            JsonDocument.Parse(json);
+        using JsonDocument document = JsonDocument.Parse(json);
 
-        JsonElement root =
-            document.RootElement;
+        JsonElement root = document.RootElement;
 
-        // mesh.json verwendet "vertices"
-        if (!root.TryGetProperty(
-                "vertices",
-                out JsonElement vertices))
+        if (!root.TryGetProperty("vertices", out JsonElement vertexArray))
         {
-            Console.WriteLine(
-                "JSON enthält kein 'vertices'-Feld."
-            );
-
-            return particles;
+            Console.WriteLine("JSON enthält kein 'vertices'-Feld.");
+            return vertices;
         }
 
-        foreach (JsonElement vertex in
-                 vertices.EnumerateArray())
+        foreach (JsonElement vertex in vertexArray.EnumerateArray())
         {
-            // Wir brauchen mindestens X, Y und Z
             if (vertex.GetArrayLength() < 3)
                 continue;
 
@@ -67,17 +59,11 @@ List<Particle> LoadWavefunction(string src)
             float y = vertex[1].GetSingle();
             float z = vertex[2].GetSingle();
 
-            Particle particle = new Particle(
-                1.0f,
-                new Color(255, 0, 255, 255),
-                new Vector3(x, y, z)
-            );
-
-            particles.Add(particle);
+            vertices.Add(new Vector3(x, y, z));
         }
 
         Console.WriteLine(
-            $"Loaded {particles.Count} particles from {src}"
+            $"Loaded {vertices.Count} vertices from {src}"
         );
     }
     catch (Exception ex)
@@ -87,7 +73,7 @@ List<Particle> LoadWavefunction(string src)
         );
     }
 
-    return particles;
+    return vertices;
 }
 
 
@@ -123,11 +109,33 @@ Camera3D rayCamera = new Camera3D
 
 Grid grid = new Grid();
 
-List<Particle> particles =
+List<Vector3> particles =
     LoadWavefunction(
         "../../../src/mesh.json"
     );
 
+
+
+PointCloud pointCloud = new PointCloud(particles);
+
+Rlgl.EnablePointMode();
+Rlgl.SetPointSize(4.0f);
+
+foreach (Vector3 position in particles)
+{
+    Rlgl.Begin(0x0000); // GL_POINTS
+
+    Rlgl.Color4ub(255, 0, 255, 255);
+    Rlgl.Vertex3f(
+        position.X,
+        position.Y,
+        position.Z
+    );
+
+    Rlgl.End();
+}
+
+Rlgl.DisablePointMode();
 
 Console.WriteLine(
     $"Loaded {particles.Count} particles."
@@ -171,12 +179,7 @@ while (!WindowShouldClose())
     // Particles
     // --------------------------------------------------------
 
-    int count = Math.Min(particles.Count, 1000);
-
-    for (int i = 0; i < count; i++)
-    {
-        particles[i].Draw();
-    }
+    pointCloud.Draw();
 
     EndMode3D();
 
@@ -312,7 +315,7 @@ class CameraState
 // Particle
 // ============================================================
 
-class Particle
+/*class Particle
 {
     public float Radius;
     public Color Color;
@@ -333,7 +336,7 @@ class Particle
             Color
         );
     }
-}
+}*/
 
 // ============================================================
 // JSON loading
@@ -484,3 +487,37 @@ class Grid
 // ============================================================
 // Initialize window
 // ============================================================
+
+
+class PointCloud
+{
+    private readonly List<Vector3> Points;
+
+    public PointCloud(List<Vector3> points)
+    {
+        Points = points;
+    }
+
+    public void Draw()
+    {
+        Rlgl.EnablePointMode();
+        Rlgl.SetPointSize(4.0f);
+        
+        Rlgl.Begin(0x0000); // GL_POINTS
+
+        Rlgl.Color4ub(255, 0, 255, 255);
+
+        foreach (Vector3 point in Points)
+        {
+            Rlgl.Vertex3f(
+                point.X,
+                point.Y,
+                point.Z
+            );
+        }
+
+        Rlgl.End();
+
+        Rlgl.DisablePointMode();
+    }
+}

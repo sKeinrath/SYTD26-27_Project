@@ -22,3 +22,7 @@ E:\Schule\SYT-D\Project\SYTD26-27_Project\obj\Debug\net10.0\refint\SYTD26-27_Pro
 E:\Schule\SYT-D\Project\SYTD26-27_Project\obj\Debug\net10.0\SYTD26-27_Project.pdb
 E:\Schule\SYT-D\Project\SYTD26-27_Project\obj\Debug\net10.0\SYTD26-27_Project.genruntimeconfig.cache
 E:\Schule\SYT-D\Project\SYTD26-27_Project\obj\Debug\net10.0\ref\SYTD26-27_Project.dll
+E:\Schule\SYT-D\Project\SYTD26-27_Project\bin\Debug\net10.0\Microsoft.DotNet.PlatformAbstractions.dll
+E:\Schule\SYT-D\Project\SYTD26-27_Project\bin\Debug\net10.0\Microsoft.Extensions.DependencyModel.dll
+E:\Schule\SYT-D\Project\SYTD26-27_Project\bin\Debug\net10.0\Silk.NET.Core.dll
+E:\Schule\SYT-D\Project\SYTD26-27_Project\bin\Debug\net10.0\Silk.NET.OpenCL.dll
