@@ -2,6 +2,35 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "build-2d-opencl",
+            "type": "cppbuild",
+            "command": "C:/msys64/mingw64/bin/g++.exe",
+            "args": [
+                "-fdiagnostics-color=always",
+                "-g",
+                "${workspaceFolder}/z_saves/2D_blank.c",
+                "-o",
+                "${workspaceFolder}/bin/2D_blank.exe",
+                "-IC:/msys64/mingw64/include",
+                "-IC:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.8/include",
+                "-LC:/msys64/mingw64/lib",
+                "-LC:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.8/lib/x64",
+                "-lglfw3",
+                "-lglew32",
+                "-lopengl32",
+                "-lgdi32",
+                "-lOpenCL",
+                "-lm"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": "build"
+        },
+        {
             "label": "build",
             "type": "cppbuild",
             "command": "C:/msys64/mingw64/bin/g++.exe",
